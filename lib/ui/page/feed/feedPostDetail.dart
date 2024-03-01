@@ -87,64 +87,56 @@ class _FeedPostDetailState extends State<FeedPostDetail> {
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<FeedState>(context);
-    return WillPopScope(
-      onWillPop: () async {
-        Provider.of<FeedState>(context, listen: false)
-            .removeLastTweetDetail(postId);
-        return Future.value(true);
-      },
-      child: Scaffold(
-        key: scaffoldKey,
-        floatingActionButton: _floatingActionButton(),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              title: customTitleText(
-                'Thread',
-              ),
-              iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-              backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-              bottom: PreferredSize(
-                child: Container(
-                  color: Colors.grey.shade200,
-                  height: 1.0,
-                ),
-                preferredSize: const Size.fromHeight(0.0),
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  state.tweetDetailModel == null ||
-                          state.tweetDetailModel!.isEmpty
-                      ? Container()
-                      : _tweetDetail(state.tweetDetailModel!.last),
-                  Container(
-                    height: 6,
-                    width: double.infinity,
-                    color: TwitterColor.mystic,
-                  )
-                ],
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                state.tweetReplyMap == null ||
-                        state.tweetReplyMap!.isEmpty ||
-                        state.tweetReplyMap![postId] == null
-                    ? [
-                        //!Removed container
-                        const Center()
-                      ]
-                    : state.tweetReplyMap![postId]!
-                        .map((x) => _commentRow(x))
-                        .toList(),
-              ),
-            )
-          ],
+    return Scaffold(
+      key: scaffoldKey,
+      floatingActionButton: _floatingActionButton(),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: customTitleText(
+          'Thread',
         ),
+        iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        bottom: PreferredSize(
+          child: Container(
+            color: Colors.grey.shade200,
+            height: 1.0,
+          ),
+          preferredSize: const Size.fromHeight(0.0),
+        ),
+      ),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                state.tweetDetailModel == null ||
+                        state.tweetDetailModel!.isEmpty
+                    ? Container()
+                    : _tweetDetail(state.tweetDetailModel!.last),
+                Container(
+                  height: 6,
+                  width: double.infinity,
+                  color: TwitterColor.mystic,
+                )
+              ],
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              state.tweetReplyMap == null ||
+                      state.tweetReplyMap!.isEmpty ||
+                      state.tweetReplyMap![postId] == null
+                  ? [
+                      //!Removed container
+                      const Center()
+                    ]
+                  : state.tweetReplyMap![postId]!
+                      .map((x) => _commentRow(x))
+                      .toList(),
+            ),
+          )
+        ],
       ),
     );
   }

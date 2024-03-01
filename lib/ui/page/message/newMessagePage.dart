@@ -68,20 +68,24 @@ class _NewMessagePageState extends State<NewMessagePage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        appBar: CustomAppBar(
-          scaffoldKey: widget.scaffoldKey,
-          isBackButton: true,
-          isBottomLine: true,
-          title: customTitleText(
-            'New Message',
-          ),
+    return Scaffold(
+      appBar: CustomAppBar(
+        scaffoldKey: widget.scaffoldKey,
+        isBackButton: true,
+        isBottomLine: true,
+        title: customTitleText(
+          'New Message',
         ),
-        body: Consumer<SearchState>(
-          builder: (context, state, child) {
-            return Column(
+      ),
+      body: Consumer<SearchState>(
+        builder: (context, state, child) {
+          return WillPopScope(
+            onWillPop: () async {
+              final state = Provider.of<SearchState>(context, listen: false);
+              state.filterByUsername("");
+              return _onWillPop();
+            },
+            child: Column(
               children: <Widget>[
                 TextField(
                   onChanged: (text) {
@@ -116,9 +120,9 @@ class _NewMessagePageState extends State<NewMessagePage> {
                   ),
                 )
               ],
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

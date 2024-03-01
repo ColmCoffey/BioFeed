@@ -395,7 +395,7 @@ class _ProfilePageState extends State<ProfilePage>
         ),
       ),
     );
-  }
+    }
 
   Widget _tweetList(BuildContext context, ProfileState authState,
       List<FeedModel>? tweetsList, bool isReply, bool isMedia) {

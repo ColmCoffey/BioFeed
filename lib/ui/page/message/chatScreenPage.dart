@@ -185,7 +185,7 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
     );
   }
 
-  Future<bool> _onWillPop() async {
+  Future<bool> _onBackPressed() async {
     state.setIsChatScreenOpen = false;
     state.onChatScreenClosed();
     return true;
@@ -230,50 +230,47 @@ class _ChatScreenPageState extends State<ChatScreenPage> {
   Widget build(BuildContext context) {
     state = Provider.of<ChatState>(context, listen: false);
     userImage = state.chatUser!.profilePic!;
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              UrlText(
-                text: state.chatUser!.displayName!,
-                style: const TextStyle(
-                    color: Colors.black87,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                state.chatUser!.userName!,
-                style: const TextStyle(color: AppColor.darkGrey, fontSize: 15),
-              )
-            ],
-          ),
-          iconTheme: const IconThemeData(color: Colors.blue),
-          backgroundColor: Colors.white,
-          actions: <Widget>[
-            IconButton(
-                icon: const Icon(Icons.info, color: AppColor.primary),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/ConversationInformation');
-                })
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            UrlText(
+              text: state.chatUser!.displayName!,
+              style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+            Text(
+              state.chatUser!.userName!,
+              style: const TextStyle(color: AppColor.darkGrey, fontSize: 15),
+            )
           ],
         ),
-        body: SafeArea(
-          child: Stack(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 50),
-                  child: _chatScreenBody(),
-                ),
+        iconTheme: const IconThemeData(color: Colors.blue),
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          IconButton(
+              icon: const Icon(Icons.info, color: AppColor.primary),
+              onPressed: () {
+                Navigator.pushNamed(context, '/ConversationInformation');
+              })
+        ],
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 50),
+                child: _chatScreenBody(),
               ),
-              _bottomEntryField()
-            ],
-          ),
+            ),
+            _bottomEntryField()
+          ],
         ),
       ),
     );
